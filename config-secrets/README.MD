@@ -1,5 +1,6 @@
 ----------------------------------------------------------------
 cm.yml, deployment.yml and deployment-mount.yml
+-----------------------------------------------
 With the help of above mentioned files demonstated the use of values in cm.yml() ConfigMap) are used in deployment.yml file using Env-variables.
 With this approach of using environment-variables, changes in cm.yml files are not reflects in deployment.yml until it is restarted.
 So to overcome this we used Voume-Mounts in deployment-mount.yml
@@ -79,6 +80,6 @@ steps:
 3) kubectl get pods
 4) exec into one of the pods
 -- kubectl exec -it <pod-name> -- bash
-# ls /opt/db-secrets     --mountpoint location
-# cat /opt/db-secrets/username
+-- ls /opt/db-secrets     --mountpoint location
+-- cat /opt/db-secrets/username
 -- will get the decoded username -- because we used the encoded values of username and password in secret.yml file which again converted these using base64.
