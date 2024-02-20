@@ -18,7 +18,7 @@ spec:
       - name: python-app
         image: venu1322/django-web-app:0.0.1.RELEASE
         env:
-        - name: DB-PORT
+        - name: DB_PORT
           valueFrom: 
             configMapKeyRef:
               name: test-cm

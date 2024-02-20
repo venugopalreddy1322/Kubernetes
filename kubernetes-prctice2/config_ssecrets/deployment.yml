@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cm-deployment
+  labels:
+    app: django-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: django-app
+  template:
+    metadata:
+      labels:
+        app: django-app
+    spec:
+      containers:
+      - name: django
+        image: venu1322/django-web-app:0.0.1.RELEASE
+        env:
+         - name: DB_PORT
+           valueFrom:
+             configMapKeyRef:
+              name: config-map
+              key: db-port
+        ports:
+        - containerPort: 8000 
+      

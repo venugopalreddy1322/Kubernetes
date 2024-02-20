@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-deployment
+  #annotations:
+    #kubernetes.io/change-cause: "Updating the image version"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: python-app
+  template:
+    metadata:
+      name: python-pod
+      labels:
+        app: python-app
+    spec: 
+      containers:
+        - name: django-container
+          image: venu1322/django-web-app:0.0.1.RELEASE
+          #image: nginx:alpine
+          ports:
+            - containerPort: 8000
