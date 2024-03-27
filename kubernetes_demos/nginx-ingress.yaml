@@ -1,8 +1,12 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata: 
-  name: inginx-ingress
+  name: nginx-ingress
 spec:
+  tls:
+    - secretName: django-demo-com-tls
+      hosts:
+        - "django-demo.com"
   rules:
     - host: django-demo.com
       http:
