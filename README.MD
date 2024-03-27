@@ -135,6 +135,8 @@ nginx-ingress   nginx   ingress-demo.com   192.168.59.106   80, 443   10s
 
 5. Access the application securely in the browser using the URL: [https://ingress-demo.com/demo/](https://ingress-demo.com/demo/)
 
+![django-demo.com](kubernetes_pics/Screenshot (71).png)
+
 ### Note
 
 - Ensure labels in deployment and service manifests match for proper service discovery.
