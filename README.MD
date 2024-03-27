@@ -1,30 +1,32 @@
-For the NodePort- service demo 
---------
-in the deployment yaml manifest
- ( template:
-    metadata:
-      labels:
-        app: django-app ) 
-and in the service yaml manifest 
-( selector:
-    app: django-app )
-should be same.
-commands used to run:
+## NodePort Service Demo
 
-´´´
-- $ kubectl apply -f deployment.yml
-´´´
-deployment.apps/nginx-deployment created
+This repository contains YAML manifests and commands to demonstrate NodePort service in Kubernetes.
 
-´´´
-- $ kubectl apply -f service_nodeport.yml
-´´´
-service/my-service created
+### Prerequisites
+- Kubernetes cluster (e.g., Minikube)
+- kubectl installed
+- curl installed
 
-´´´
-- $ kubectl get all
-´´´
-NAME                                    READY   STATUS    RESTARTS   AGE
+### Deployment Steps
+
+1. Apply the deployment YAML manifest:
+    ```shell
+    $ kubectl apply -f deployment.yml
+    ```
+    This creates the nginx-deployment.
+
+2. Apply the service YAML manifest:
+    ```shell
+    $ kubectl apply -f service_nodeport.yml
+    ```
+    This creates the my-service NodePort service.
+
+3. Verify deployment:
+    ```shell
+    $ kubectl get all
+    ```
+###output:
+  NAME                                    READY   STATUS    RESTARTS   AGE
 pod/nginx-deployment-74895669fb-pg4kh   1/1     Running   0          116s
 pod/nginx-deployment-74895669fb-v45m6   1/1     Running   0          116s
 
@@ -37,11 +39,19 @@ deployment.apps/nginx-deployment   2/2     2            2           116s
 
 NAME                                          DESIRED   CURRENT   READY   AGE
 replicaset.apps/nginx-deployment-74895669fb   2         2         2       116s
+    
+    Ensure that the deployment and service are running correctly.
 
-´´´
-$ minikube ssh
+### Accessing the Demo
 
-´´´
+#### Using Minikube IP
+
+1. SSH into Minikube:
+    ```shell
+    $ minikube ssh
+    ```
+    ##output:
+
                          _             _
             _         _ ( )           ( )
   ___ ___  (_)  ___  (_)| |/')  _   _ | |_      __
@@ -50,112 +60,96 @@ $ minikube ssh
 (_) (_) (_)(_)(_) (_)(_)(_) (_)`\___/'(_,__/'`\____)
 
 
-´´´
-$ curl -L http://10.99.238.95:8000/demo
-´´´
 
-curl -L http://10.99.238.95:8000/demo
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<title>CSS Template</title>
-<meta charset="utf-8">
-- so it is getting response....
+2. Test the service using curl:
+    ```shell
+    $ curl -L http://<minikube_ip>:30007/demo
+    ```
 
-´´´
-$ exit
-´´´
-exit
-logout
+3. You should receive a response indicating successful deployment.
 
-´´´
-$ minikube ip
-´´´
-192.168.59.104
+4. Exit Minikube:
+    ```shell
+    $ exit
+    ```
 
-´´´
-$ curl -L http://192.168.59.104:30007/demo
+#### Using Ingress
 
-´´´
-  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                 Dload  Upload   Total   Spent    Left  Speed
-  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
-100  1879  100  1879    0     0  60241      0 --:--:-- --:--:-- --:--:-- 60241<!DOCTYPE html>
-<html lang="en">
-<head>
-<title>CSS Template</title>
---- so getting response..
-
-Try on the browser
-- http://192.168.59.104:30007/demo
-We can see the webpage..
-
-
-For Ingress:
---> enable ingress-controller in minikube
-
-´´´´
+1. Enable Ingress controller in Minikube:
+    ```shell
     $ minikube addons enable ingress
-´´´´
-    confirm by the following commands
-    
-    ´´´´
+    ```
+
+2. Confirm Ingress controller is running:
+    ```shell
     $ kubectl get pods -n ingress-nginx
     $ kubectl get svc -n ingress-nginx
+    ```
 
-    ´´´´
-    deployment:
-    
-    ´´´´
+3. Apply deployment and service YAMLs for Ingress:
+    ```shell
     $ kubectl apply -f deployment2.yml
-    ´´´´
-    service:
-    ´´´´
     $ kubectl apply -f django-service.yml
-    ´´´´
-    Ingress:
-    ´´´´
+    ```
+
+4. Apply Ingress YAML:
+    ```shell
     $ kubectl apply -f nginx-ingress.yml
+    ```
+
+5. Verify Ingress:
+    ```shell
     $ kubectl get ing
-    ´´´´
-    NAME            CLASS   HOSTS              ADDRESS          PORTS   AGE
-    nginx-ingress   nginx   ingress-demo.com   192.168.59.106   80      35m
-    -------------------------------------------------------------------------------------
-    NOTE: 
-                we need to update /etc/hosts file with the following entry:
-                192.168.59.106 ingress-demo.com
-        Also because we are using windows, need to update 
-            /c/Windows/System32/drivers/etc file (one with administative mode in gitbash)
- 
-                        192.168.59.106 ingress-demo.com
+    ```
 
-    ------------------------------------------------------------------------------------
-    Now access the ingress-demo.com on browser you will access the application.
+6. Update hosts file:
+    - On Linux/Mac:
+        ```shell
+        $ sudo nano /etc/hosts
+        ```
+    - On Windows:
+        Update `C:\Windows\System32\drivers\etc\hosts` with admin privileges.
 
+    Add:
+    ```
+    <minikube_ip> ingress-demo.com
+    ```
 
+7. Access the application in the browser using the URL: [http://ingress-demo.com/demo/](http://ingress-demo.com/demo/)
 
-For TLS with Ingress
-step 1:
-´´´´
-$ openssl req -x509 -newkey rsa:4096 -sha256 -nodes -keyout ca.key -out ca.crt -subj "//CN=ingress-demo.com" -days 365
-´´´´
-step 2:
-´´´´
-$ kubectl create secret tls ingress-demo-com-tls --cert ca.crt --key ca.key 
-´´´´
+### TLS with Ingress
+
+1. Generate TLS certificate:
+    ```shell
+    $ openssl req -x509 -newkey rsa:4096 -sha256 -nodes -keyout ca.key -out ca.crt -subj "//CN=ingress-demo.com" -days 365
+    ```
+
+2. Create TLS secret:
+    ```shell
+    $ kubectl create secret tls ingress-demo-com-tls --cert ca.crt --key ca.key
+    ```
     secret/ingress-demo-com-tls created
     copy this secret in TLS_ingress.yml file
-    then:
-    
-´´´´
-$ kubectl apply -f tls_ingress.yml
-´´´´
+
+3. Apply TLS Ingress YAML:
+    ```shell
+    $ kubectl apply -f tls_ingress.yml
+    ```
     ingress.networking.k8s.io/nginx-ingress created
 
-´´´´
-$ kubectl get ing
-´´´´
-NAME            CLASS   HOSTS              ADDRESS          PORTS     AGE
+4. Verify Ingress:
+    ```shell
+    $ kubectl get ing
+    ```
+    NAME            CLASS   HOSTS              ADDRESS          PORTS     AGE
 nginx-ingress   nginx   ingress-demo.com   192.168.59.106   80, 443   10s
-Now goto browser and https://ingress-demo.com/demo/
 
+5. Access the application securely in the browser using the URL: [https://ingress-demo.com/demo/](https://ingress-demo.com/demo/)
+
+### Note
+
+- Ensure labels in deployment and service manifests match for proper service discovery.
+- Update the hosts file with the appropriate IP address for Ingress to work correctly.
+- For Windows users, modify `C:\Windows\System32\drivers\etc\hosts` with administrative privileges.
+
+Enjoy exploring the demo! 🚀
