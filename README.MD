@@ -51,7 +51,6 @@ replicaset.apps/nginx-deployment-74895669fb   2         2         2       116s
     $ minikube ssh
     ```
     ##output:
-  
                              _             _
                 _         _ ( )           ( )
       ___ ___  (_)  ___  (_)| |/')  _   _ | |_      __
