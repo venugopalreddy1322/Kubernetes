@@ -134,8 +134,10 @@ replicaset.apps/nginx-deployment-74895669fb   2         2         2       116s
 nginx-ingress   nginx   ingress-demo.com   192.168.59.106   80, 443   10s
 
 5. Access the application securely in the browser using the URL: [https://ingress-demo.com/demo/](https://ingress-demo.com/demo/)
+another example:
+URL: [https://django-demo.com/demo/](https://django-demo.com/demo/)
 
-![django-demo.com](kubernetes_pics/Screenshot (71).png)
+![django-demo.com](https://github.com/venugopalreddy1322/project-diagrams/blob/main/kubernetes_pics/Screenshot%20(71).png)
 
 ### Note
 
