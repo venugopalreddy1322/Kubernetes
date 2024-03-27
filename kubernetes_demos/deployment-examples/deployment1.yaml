@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  annotations:
+    kubernetes.io/change-cause: "Updating image to version 1.20"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      dept: dev
+  template:
+    metadata:
+      name: nginx-pod
+      labels:
+        dept: dev
+    spec:
+      containers:
+        - name: nginx-container
+          image: nginx:1.20
+          ports:
+            - containerPort: 80

@@ -1,0 +1,30 @@
+# Host based routing by using Ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: host-based-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/default-backend: default-http-backend
+spec:
+  rules:
+    - host: ingress-nginx.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: nginx-service
+                port:
+                  number: 80
+    - host: ingress-django.com
+      http:
+        paths:
+          - path: /demo
+            pathType: Prefix
+            backend:
+              service:
+                name: django-service
+                port:
+                  number: 8000
+

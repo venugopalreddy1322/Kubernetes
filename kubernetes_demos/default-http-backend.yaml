@@ -1,0 +1,32 @@
+# This is default backend service 
+# which gives error message when none of your search patters match
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: default-http-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: default-http-backend
+  template:
+    metadata:
+      labels:
+        app: default-http-backend
+    spec:
+      containers:
+        - name: default-http-backend
+          image: k8s.gcr.io/defaultbackend-amd64:1.5
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: default-http-backend
+spec:
+  selector:
+    app: default-http-backend
+  ports:
+    - port: 80
+      targetPort: 8080
