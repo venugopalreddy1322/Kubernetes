@@ -50,17 +50,6 @@ replicaset.apps/nginx-deployment-74895669fb   2         2         2       116s
     ```shell
     $ minikube ssh
     ```
-    ##output:
-                             _             _
-                _         _ ( )           ( )
-      ___ ___  (_)  ___  (_)| |/')  _   _ | |_      __
-    /' _ ` _ `\| |/' _ `\| || , <  ( ) ( )| '_`\  /'__`\
-    | ( ) ( ) || || ( ) || || |\`\ | (_) || |_) )(  ___/
-    (_) (_) (_)(_)(_) (_)(_)(_) (_)`\___/'(_,__/'`\____)               
-
-
-
-
 2. Test the service using curl:
     ```shell
     $ curl -L http://<minikube_ip>:30007/demo
