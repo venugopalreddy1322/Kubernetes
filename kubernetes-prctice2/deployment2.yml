@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: django-deployment
+  namespace: demo-namespace
   #annotations:
     #kubernetes.io/change-cause: "Updating the image version"
 spec:

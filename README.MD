@@ -11,13 +11,19 @@ and in the service yaml manifest
 should be same.
 commands used to run:
 
+´´´
 - $ kubectl apply -f deployment.yml
+´´´
 deployment.apps/nginx-deployment created
 
+´´´
 - $ kubectl apply -f service_nodeport.yml
+´´´
 service/my-service created
 
+´´´
 - $ kubectl get all
+´´´
 NAME                                    READY   STATUS    RESTARTS   AGE
 pod/nginx-deployment-74895669fb-pg4kh   1/1     Running   0          116s
 pod/nginx-deployment-74895669fb-v45m6   1/1     Running   0          116s
@@ -32,7 +38,10 @@ deployment.apps/nginx-deployment   2/2     2            2           116s
 NAME                                          DESIRED   CURRENT   READY   AGE
 replicaset.apps/nginx-deployment-74895669fb   2         2         2       116s
 
-- $ minikube ssh
+´´´
+$ minikube ssh
+
+´´´
                          _             _
             _         _ ( )           ( )
   ___ ___  (_)  ___  (_)| |/')  _   _ | |_      __
@@ -41,7 +50,10 @@ replicaset.apps/nginx-deployment-74895669fb   2         2         2       116s
 (_) (_) (_)(_)(_) (_)(_)(_) (_)`\___/'(_,__/'`\____)
 
 
-- $ curl -L http://10.99.238.95:8000/demo
+´´´
+$ curl -L http://10.99.238.95:8000/demo
+´´´
+
 curl -L http://10.99.238.95:8000/demo
 <!DOCTYPE html>
 <html lang="en">
@@ -50,14 +62,21 @@ curl -L http://10.99.238.95:8000/demo
 <meta charset="utf-8">
 - so it is getting response....
 
-- $ exit
+´´´
+$ exit
+´´´
 exit
 logout
 
-- $ minikube ip
+´´´
+$ minikube ip
+´´´
 192.168.59.104
 
-- $ curl -L http://192.168.59.104:30007/demo
+´´´
+$ curl -L http://192.168.59.104:30007/demo
+
+´´´
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
   0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
@@ -69,22 +88,36 @@ logout
 
 Try on the browser
 - http://192.168.59.104:30007/demo
-We got the webpage..
+We can see the webpage..
 
 
 For Ingress:
 --> enable ingress-controller in minikube
+
+´´´´
     $ minikube addons enable ingress
+´´´´
     confirm by the following commands
+    
+    ´´´´
     $ kubectl get pods -n ingress-nginx
     $ kubectl get svc -n ingress-nginx
+
+    ´´´´
     deployment:
+    
+    ´´´´
     $ kubectl apply -f deployment2.yml
+    ´´´´
     service:
+    ´´´´
     $ kubectl apply -f django-service.yml
+    ´´´´
     Ingress:
+    ´´´´
     $ kubectl apply -f nginx-ingress.yml
     $ kubectl get ing
+    ´´´´
     NAME            CLASS   HOSTS              ADDRESS          PORTS   AGE
     nginx-ingress   nginx   ingress-demo.com   192.168.59.106   80      35m
     -------------------------------------------------------------------------------------
@@ -103,16 +136,25 @@ For Ingress:
 
 For TLS with Ingress
 step 1:
+´´´´
 $ openssl req -x509 -newkey rsa:4096 -sha256 -nodes -keyout ca.key -out ca.crt -subj "//CN=ingress-demo.com" -days 365
+´´´´
 step 2:
+´´´´
 $ kubectl create secret tls ingress-demo-com-tls --cert ca.crt --key ca.key 
+´´´´
     secret/ingress-demo-com-tls created
     copy this secret in TLS_ingress.yml file
     then:
+    
+´´´´
 $ kubectl apply -f tls_ingress.yml
+´´´´
     ingress.networking.k8s.io/nginx-ingress created
 
+´´´´
 $ kubectl get ing
+´´´´
 NAME            CLASS   HOSTS              ADDRESS          PORTS     AGE
 nginx-ingress   nginx   ingress-demo.com   192.168.59.106   80, 443   10s
 Now goto browser and https://ingress-demo.com/demo/
