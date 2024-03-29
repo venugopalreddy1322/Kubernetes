@@ -145,4 +145,127 @@ URL: [https://django-demo.com/demo/](https://django-demo.com/demo/)
 - Update the hosts file with the appropriate IP address for Ingress to work correctly.
 - For Windows users, modify `C:\Windows\System32\drivers\etc\hosts` with administrative privileges.
 
+## RBAC Demo
+- To Authenticate a user
+
+1. Generate user's private key with openssl:
+    ```shell
+    $ openssl genrsa -out venu.key 2048
+    ```
+
+2. Create a certificate signing request for user with the above key:
+    ```shell
+    $ openssl req -new -key venu.key -out venu.csr -subj "/CN=venu/O=dev/O=example.org"
+    ```
+    or
+
+    ```shell
+    $ openssl req -new -key venu.key -out venu.csr
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [AU]:
+State or Province Name (full name) [Some-State]:
+Locality Name (eg, city) []:
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:dev,example.org
+Organizational Unit Name (eg, section) []:dev,prod
+Common Name (e.g. server FQDN or YOUR name) []:venu
+Email Address []:
+
+Please enter the following 'extra' attributes
+to be sent with your certificate request
+A challenge password []:
+An optional company name []:
+```
+3. Nowthis certificate signing request must be signed by the Certificate Authority:
+    - can get the Certificate Authority file details in ~/.kube/config file
+    ```shell
+    $ openssl x509 -req -CA ~/.minikube/ca.crt -CAkey ~/.minikube/ca.key -CAcreateserial -days 730 -in venu.csr -out venu.crt
+    ```
+Certificate request self-signature ok
+subject=C=AU, ST=Some-State, O=dev,example.org, OU=dev,prod, CN=venu
+
+
+4. Add the user to the cluster:
+    ```shell
+    $ kubectl config set-credentials venu --client-certificate=/c/Users/venuc/.minikube/profiles/minikube/venu.crt --client-key=/c/Users/venuc/.minikube/profiles/minikube/venu.key --kubeconfig=/c/Users/venuc/.kube/config
+    ```
+   User "venu" set.
+5.  Create venu-context:
+    ```shell
+    $ kubectl config set-context venu-minikube --cluster=minikube --user=venu --namespace=default
+    ```
+    Context "venu-minikube" created.
+
+    to check the contexts and switch between:
+
+    ```shell
+    $ kubectl config get-contexts
+    ```
+    CURRENT   NAME            CLUSTER    AUTHINFO   NAMESPACE
+              minikube        minikube   minikube   default
+      *       venu-minikube   minikube   venu       default
+
+    ```shell
+    $ kubectl config use-context venu-minikube
+    
+    ```
+    Switched to context "venu-minikube".
+
+    ```shell
+    $ kubectl get pods
+
+    ```
+    Error from server (Forbidden): pods is forbidden: User "venu" cannot list resource "pods" in API group "" in the namespace "default"
+
+    Here comes Roles, cluster roles and Role-bindings, clusterRoleBindings
+    - Here ane some examples:
+
+    ```yaml
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+    # "namespace" omitted since ClusterRoles are not namespaced
+        name: demo-cluster-role
+    rules:
+    - apiGroups: ["rbac.authorization.k8s.io"]
+      resources: ["roles"]
+      verbs: ["get", "watch", "list"]
+  
+    - apiGroups: [""]
+      resources: ["pods"]
+      verbs: ["get", "watch", "list"]
+    ```
+```yaml 
+apiVersion: rbac.authorization.k8s.io/v1
+# This cluster role binding allows anyone in the "manager" group to read secrets in any namespace.
+kind: ClusterRoleBinding
+metadata:
+  
+  name: demo-cluster-role-binding
+subjects:
+- kind: User
+  name: venu # Name is case sensitive
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: demo-cluster-role
+  apiGroup: rbac.authorization.k8s.io
+```
+- Now venu user can get pods and roles
+
+    ```shell
+    $ kubectl get pods
+    ```
+    No resources found in default namespace.
+
+
+
+
+
+    
 Enjoy exploring the demo! 🚀
