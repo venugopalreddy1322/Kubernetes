@@ -161,6 +161,7 @@ URL: [https://django-demo.com/demo/](https://django-demo.com/demo/)
 
     ```shell
     $ openssl req -new -key venu.key -out venu.csr
+###Note
 You are about to be asked to enter information that will be incorporated
 into your certificate request.
 What you are about to enter is what is called a Distinguished Name or a DN.
@@ -180,7 +181,7 @@ Please enter the following 'extra' attributes
 to be sent with your certificate request
 A challenge password []:
 An optional company name []:
-```
+
 3. Nowthis certificate signing request must be signed by the Certificate Authority:
     - can get the Certificate Authority file details in ~/.kube/config file
     ```shell
