@@ -161,7 +161,8 @@ URL: [https://django-demo.com/demo/](https://django-demo.com/demo/)
 
     ```shell
     $ openssl req -new -key venu.key -out venu.csr
-###Note
+### Note:
+
 You are about to be asked to enter information that will be incorporated
 into your certificate request.
 What you are about to enter is what is called a Distinguished Name or a DN.
@@ -263,6 +264,37 @@ roleRef:
     $ kubectl get pods
     ```
     No resources found in default namespace.
+
+
+### Service Account
+  Instead of users, if our applications/pods need to perform some actions on Kubernetes resources, that can be accomplised by the ServiceAccount.
+- Create Service account(specific namespace)
+- Create a role
+- In rolebinding add the service account, as we did with user.
+    Example:
+```yaml 
+apiVersion: rbac.authorization.k8s.io/v1
+# This cluster role binding allows all resources like pods in the "test-sa" ServiceAccount # in default namespace read pods and roles as specified in demo-cluster-role.
+kind: ClusterRoleBinding
+metadata:
+  
+  name: demo-cluster-role-binding
+subjects:
+- kind: ServiceAccount
+  name: test-sa 
+  nameSpace: default
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: demo-cluster-role
+  apiGroup: rbac.authorization.k8s.io
+```
+- To check the authority a simple command is
+```shell
+ $ kubectl auth can-i get pods --as="system:serviceaccount:default:test-sa"
+
+```
+    yes
 
 
 
