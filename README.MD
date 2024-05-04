@@ -97,7 +97,7 @@ replicaset.apps/nginx-deployment-74895669fb   2         2         2       116s
         $ sudo nano /etc/hosts
         ```
     - On Windows:
-        Update `C:\Windows\System32\drivers\etc\hosts` with admin privileges.
+        Update `:/c/Windows/System32/drivers/etc/hosts` with admin privileges.
 
     Add:
     ```
@@ -161,6 +161,8 @@ URL: [https://django-demo.com/demo/](https://django-demo.com/demo/)
 
     ```shell
     $ openssl req -new -key venu.key -out venu.csr
+
+    ```
 ### Note:
 You are about to be asked to enter information that will be incorporated
 into your certificate request.
@@ -324,4 +326,4 @@ roleRef:
 
 
     
-Enjoy exploring the demo! 🚀
+Enjoy exploring the demos! 🚀
