@@ -15,7 +15,7 @@ spec:
         app: nginx-app
     spec:
       containers:
-        - name: nginx-pod
+        - name: nginx-container
           image: nginx:latest
           ports:
             - containerPort: 80
