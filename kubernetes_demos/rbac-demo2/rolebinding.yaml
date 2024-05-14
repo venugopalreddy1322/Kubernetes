@@ -1,6 +1,6 @@
 apiVersion: rbac.authorization.k8s.io/v1
-# This role binding allows "venu" to read pods in the "default" namespace.
-# You need to already have a Role named "pod-reader" in that namespace.
+# This role binding allows "jhansi" to read pods in the "default" namespace.
+# You need to already have a Role named "demo-role" in that namespace.
 kind: RoleBinding
 metadata:
   name: demo-role-binding
@@ -8,7 +8,7 @@ metadata:
 subjects:
 # You can specify more than one "subject"
 - kind: User
-  name: venu # "name" is case sensitive
+  name: jhansi # "name" is case sensitive
   apiGroup: rbac.authorization.k8s.io
 roleRef:
   # "roleRef" specifies the binding to a Role / ClusterRole

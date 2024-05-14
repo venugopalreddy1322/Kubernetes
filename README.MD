@@ -164,8 +164,7 @@ URL: [https://django-demo.com/demo/](https://django-demo.com/demo/)
 
     ```
 ### Note:
-You are about to be asked to enter information that will be incorporated
-into your certificate request.
+You are about to be asked to enter information that will be incorporated into your certificate request.
 What you are about to enter is what is called a Distinguished Name or a DN.
 There are quite a few fields but you can leave some blank
 For some fields there will be a default value,
@@ -184,8 +183,9 @@ to be sent with your certificate request
 A challenge password []:
 An optional company name []:
 
-3. Nowthis certificate signing request must be signed by the Certificate Authority:
+3. Now this certificate signing request must be signed by the Certificate Authority:
     - can get the Certificate Authority file details in ~/.kube/config file
+
     ```shell
     $ openssl x509 -req -CA ~/.minikube/ca.crt -CAkey ~/.minikube/ca.key -CAcreateserial -days 730 -in venu.csr -out venu.crt
     ```
@@ -198,7 +198,9 @@ subject=C=AU, ST=Some-State, O=dev,example.org, OU=dev,prod, CN=venu
     $ kubectl config set-credentials venu --client-certificate=/c/Users/venuc/.minikube/profiles/minikube/venu.crt --client-key=/c/Users/venuc/.minikube/profiles/minikube/venu.key --kubeconfig=/c/Users/venuc/.kube/config
     ```
    User "venu" set.
+
 5.  Create venu-context:
+
     ```shell
     $ kubectl config set-context venu-minikube --cluster=minikube --user=venu --namespace=default
     ```
@@ -243,6 +245,7 @@ subject=C=AU, ST=Some-State, O=dev,example.org, OU=dev,prod, CN=venu
       resources: ["pods"]
       verbs: ["get", "watch", "list"]
     ```
+
 ```yaml 
 apiVersion: rbac.authorization.k8s.io/v1
 # This cluster role binding allows anyone in the "manager" group to read secrets in any namespace.
