@@ -11,8 +11,8 @@ spec:
       labels:
         app: node-exporter
     spec:
-      # nodeSelector:
-      # Kubernetes.io/os: linux
+      nodeSelector:
+        kubernetes.io/os: linux
       containers:
         - name: node-exporter
           image: prom/node-exporter:latest
