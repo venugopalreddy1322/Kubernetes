@@ -262,7 +262,7 @@ roleRef:
   name: demo-cluster-role
   apiGroup: rbac.authorization.k8s.io
 ```
-- Now venu user can get pods and roles
+- Now venu user can get pods and roles in any Namespace across Cluster.
 
     ```shell
     $ kubectl get pods
